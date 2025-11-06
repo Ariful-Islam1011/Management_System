@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation System</title>
+    <style>
+        /* [Note: All original CSS is retained for styling] */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #c4c7d7 0%, #3c3743 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #dc2626;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .portal-selector {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+            min-width: 280px;
+            max-width: 400px;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .portal-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .portal-title {
+            font-size: 1.8em;
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .portal-desc {
+            color: #6b7280;
+            font-size: 1.1em;
+        }
+
+        .portal-view {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .portal-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .nav-btn.active {
+            background: #dc2626;
+            color: white;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-secondary {
+            background: #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-top: 5px;
+            
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input, .search-bar select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .donor-card {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #dc2626;
+            transition: all 0.3s ease;
+        }
+
+        .donor-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .donor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .donor-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .blood-badge {
+            background: #dc2626;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .donor-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            color: #4b5563;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-unavailable {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .inventory-card {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .inventory-card:hover {
+            transform: scale(1.05);
+        }
+
+        .blood-type {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .units-count {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .units-label {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .notification-bar {
+            background: #fef3c7; /* light yellow */
+            color: #92400e; /* dark brown text */
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            border: 2px solid #fcd34d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .notification-bar button {
+             margin-left: 20px;
+        }
+
+        .notification-bar p {
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-box h2 {
+            color: #1f2937;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            overflow: hidden; /* For profile image */
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #1f2937;
+        }
+
+        .tab-btn.active {
+            color: #dc2626;
+            border-bottom-color: #dc2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .close-modal {
+            font-size: 2em;
+            font-weight: bold;
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #dc2626;
+        }
+
+        .message-thread-container {
+            flex-grow: 1;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .message-sent {
+            background: #dbeafe;
+            margin-left: auto;
+            text-align: right;
+            border-bottom-right-radius: 0;
+        }
+
+        .message-received {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 0;
+            margin-right: auto;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .message-sent .message-sender {
+            color: #1e40af;
+        }
+
+
+        .message-text {
+            color: #1f2937;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.8em;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        #messageForm {
+            flex-shrink: 0;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .portal-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="portalSelection">
+            <header>
+                <h1>🩸 Dhaka University Blood Bank 🩸</h1>
+                <p class="tagline">Donate Blood - Save Lives</p>
+            </header>
+
+            <div class="portal-selector">
+                <div class="portal-card" onclick="showPortal('donor')">
+                    <div class="portal-icon">👤</div>
+                    <div class="portal-title">Donor Portal</div>
+                    <div class="portal-desc">Manage your Profile & Search Blood</div>
+                </div>
+
+                <div class="portal-card" onclick="showPortal('admin')">
+                    <div class="portal-icon">🏥</div>
+                    <div class="portal-title">Admin Portal</div>
+                    <div class="portal-desc">Manage blood bank, donors, and inventory</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="donorPortal" class="portal-view">
+            <button class="back-btn" onclick="goBack()">← Back to Portal Selection</button>
+            
+            <div id="donorAuth">
+                <header>
+                    <h1>👤 Donor Portal</h1>
+                    <p class="tagline">Register & Manage Your Profile</p>
+                </header>
+
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showDonorAuthSection('donorLogin')">Login</button>
+                    <button class="nav-btn" onclick="showDonorAuthSection('donorRegister')">Register</button>
+                    <button class="nav-btn" onclick="showDonorAuthSection('donorForgotPassword')">Forgot Password</button>
+                    <button class="nav-btn" onclick="showDonorAuthSection('donorSearchPublic')">Search Donors</button>
+                    <button class="nav-btn" onclick="showDonorAuthSection('donorInventoryPublic')">Blood Availability</button>
+                    <button class="nav-btn" onclick="showDonorAuthSection('donorPatientRequest')">Patient Blood Request</button>
+                </div>
+
+                <div id="donorLogin" class="section active">
+                    <div class="login-box">
+                        <h2>🔐 Donor Login</h2>
+                        <div id="donorLoginAlert"></div>
+                        <form onsubmit="donorLogin(event)">
+                            <div class="form-group">
+                                <label>Donor ID </label>
+                                <input type="text" id="loginDonorId" placeholder="Enter your Donor ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" id="loginDonorPassword" placeholder="Enter your password" required>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Login</button>
+                            <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="showDonorAuthSection('donorPatientRequest')">Send Blood Request</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="donorRegister" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Register as Blood Donor</h2>
+                    <div id="donorRegisterAlert"></div>
+                    <form id="donorRegisterForm" onsubmit="registerDonor(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="donorName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Age *</label>
+                                <input type="number" id="donorAge" min="18" max="65" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Group *</label>
+                                <select id="donorBloodGroup" required>
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Gender *</label>
+                                <select id="donorGender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Number *</label>
+                                <input type="tel" id="donorContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="donorEmail">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address *</label>
+                            <textarea id="donorAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Create Password *</label>
+                            <input type="password" id="donorPassword" minlength="6" placeholder="Minimum 6 characters" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Medical History (if any)</label>
+                            <textarea id="donorMedicalHistory" rows="2" placeholder="Any allergies, conditions, or medications"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Register as Donor</button>
+                    </form>
+                </div>
+
+                <div id="donorForgotPassword" class="section">
+                    <div class="login-box">
+                        <h2>🔑 Reset Password</h2>
+                        <div id="forgotPasswordAlert"></div>
+                        <form id="resetPasswordStep1" onsubmit="sendResetCode(event)">
+                            <h3>Step 1: Get Code</h3>
+                            <div class="form-group">
+                                <label>Donor ID</label>
+                                <input type="text" id="resetDonorId" placeholder="Enter your Donor ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Number</label>
+                                <input type="tel" id="resetContact" placeholder="Enter registered contact number" required>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Send Reset Code</button>
+                        </form>
+                        <form id="resetPasswordStep2" onsubmit="resetPassword(event)" style="display: none;">
+                            <h3>Step 2: Enter Code & New Password</h3>
+                            <div class="form-group">
+                                <label>Verification Code</label>
+                                <input type="text" id="resetCode" placeholder="Enter the 4-digit code" maxlength="4" required>
+                            </div>
+                            <div class="form-group" id="resendGroup">
+                                <button type="button" class="btn btn-secondary btn-small" id="resendOtpBtn" style="display: none;" onclick="resendResetCode()">Resend Code</button>
+                                <span id="resendTimer" style="display: none; color: #667eea; font-size: 0.9em; margin-top: 10px;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" id="resetNewPassword" minlength="6" placeholder="Minimum 6 characters" required>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Reset Password</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="donorSearchPublic" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Search Available Blood Donors</h2>
+                    <div class="search-bar">
+                        <select id="publicSearchBloodGroup" onchange="searchDonorsPublic()">
+                            <option value="">All Blood Groups</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        <select id="publicSearchAvailability" onchange="searchDonorsPublic()">
+                            <option value="available">Available to Donate</option>
+                            <option value="all">All Donors (for info only)</option>
+                        </select>
+                    </div>
+                    <div id="publicSearchResults"></div>
+                </div>
+
+                <div id="donorInventoryPublic" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Blood Availability</h2>
+                    <div class="inventory-grid" id="publicInventoryGrid"></div>
+                </div>
+
+                <div id="donorPatientRequest" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Send Blood Request to Admin</h2>
+                    <div class="alert alert-info">
+                        This form submits an urgent request directly to the Blood Bank Admin. Please provide accurate details.
+                    </div>
+                    <div id="patientRequestAlert"></div>
+                    <form onsubmit="submitPatientRequest(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Your Name (Requester) *</label>
+                                <input type="text" id="patientRequesterName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Contact Number *</label>
+                                <input type="tel" id="patientRequesterContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Patient Name (or relation)</label>
+                                <input type="text" id="patientPatientName">
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Group Required *</label>
+                                <select id="patientRequestBloodGroup" required>
+                                    <option value="">Select</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Units Required *</label>
+                                <input type="number" id="patientRequestUnits" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Hospital/Location</label>
+                                <input type="text" id="patientLocation">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency/Notes</label>
+                            <textarea id="patientRequestNotes" rows="3" placeholder="e.g., Critical urgency, admitted to Dhaka Medical..."></textarea>
+                        </div>
+                        <button type="submit" class="btn">Submit Urgent Request</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="donorDashboard" style="display: none;">
+                 <div id="bloodRequestNotification" class="notification-bar" style="display: none;">
+                    <p id="notificationText"></p>
+                    <button class="btn btn-small btn-secondary" onclick="acceptBloodRequest()">I Can Donate / Contact Me</button>
+                </div>
+                <div class="profile-header">
+                    <div class="profile-avatar" id="donorAvatar">D</div>
+                    <h2 id="donorWelcome">Welcome!</h2>
+                    <p id="donorIdDisplay"></p>
+                    <button class="back-btn" onclick="donorLogout()" style="margin-top: 15px;">Logout</button>
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="showDonorTab('donorProfile')">My Profile</button>
+                    <button class="tab-btn" onclick="showDonorTab('donorHistory')">Donation History</button>
+                    <button class="tab-btn" onclick="showDonorTab('donorMessages')">Messages</button>
+                    <button class="tab-btn" onclick="showDonorTab('donorEditProfile')">Edit Profile</button>
+                </div>
+
+                <div id="donorProfile" class="section active">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">My Profile</h2>
+                    <div id="donorProfileContent"></div>
+                </div>
+
+                <div id="donorHistory" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">My Donation History</h2>
+                    <div id="donorHistoryContent"></div>
+                </div>
+
+                <div id="donorMessages" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">My Messages</h2>
+                    <div id="donorMessagesContent"></div>
+                    <button class="btn btn-secondary" onclick="openMessageModal('Admin')">Send Message to Admin</button>
+                </div>
+
+                <div id="donorEditProfile" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Edit Profile</h2>
+                    <div id="donorEditAlert"></div>
+                    <form id="donorEditForm" onsubmit="updateDonorProfile(event)">
+                        <div class="form-grid">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>Profile Picture URL (Optional - will replace avatar)</label>
+                                <input type="url" id="editDonorProfilePicture" placeholder="Paste image link here (e.g., https://example.com/photo.jpg)">
+                            </div>
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="editDonorName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Age *</label>
+                                <input type="number" id="editDonorAge" min="18" max="65" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Number *</label>
+                                <input type="tel" id="editDonorContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="editDonorEmail">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Address *</label>
+                            <textarea id="editDonorAddress" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Change Password (leave blank to keep current)</label>
+                            <input type="password" id="editDonorPassword" minlength="6" placeholder="Minimum 6 characters">
+                        </div>
+                        <button type="submit" class="btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="adminPortal" class="portal-view">
+            <button class="back-btn" onclick="goBack()">← Back to Portal Selection</button>
+
+            <div id="adminLogin">
+                <div class="login-box">
+                    <h2>🔐 Admin Login</h2>
+                    <div id="adminLoginAlert"></div>
+                    <form onsubmit="adminLogin(event)">
+                        <div class="form-group">
+                            <label>Admin Password</label>
+                            <input type="password" id="adminPassword" placeholder="Enter admin password " required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Login</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="adminDashboard" style="display: none;">
+                <header>
+                    <h1>🏥 Admin Dashboard</h1>
+                    <p class="tagline">Manage Blood Bank Operations</p>
+                    <button class="back-btn" onclick="adminLogout()" style="margin-top: 15px;">Logout</button>
+                </header>
+
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="showAdminSection('adminStats')">Statistics</button>
+                    <button class="nav-btn" onclick="showAdminSection('adminDonors')">Manage Donors</button>
+                    <button class="nav-btn" onclick="showAdminSection('adminInventory')">Inventory</button>
+                    <button class="nav-btn" onclick="showAdminSection('adminRequests')">Requests</button>
+                    <button class="nav-btn" onclick="showAdminSection('adminMessages')">Messages</button>
+                </div>
+
+                <div id="adminStats" class="section active">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Statistics Overview</h2>
+                    <div class="stats-grid" id="statsGrid"></div>
+                    <h3 style="margin: 30px 0 20px; color: #1f2937;">Blood Inventory</h3>
+                    <div class="inventory-grid" id="adminInventoryGrid"></div>
+                </div>
+
+                <div id="adminDonors" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Manage Donors</h2>
+                    <div class="search-bar">
+                        <input type="text" id="adminSearchName" placeholder="Search by name..." onkeyup="searchDonorsAdmin()">
+                        <select id="adminSearchBloodGroup" onchange="searchDonorsAdmin()">
+                            <option value="">All Blood Groups</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                        <select id="adminSearchStatus" onchange="searchDonorsAdmin()">
+                            <option value="all">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div id="adminDonorsList"></div>
+                </div>
+
+                <div id="adminInventory" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Manage Blood Inventory</h2>
+                    <div id="inventoryAlert"></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Blood Group</label>
+                            <select id="inventoryBloodGroup">
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Units</label>
+                            <input type="number" id="inventoryUnits" min="0" placeholder="Enter units">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="updateInventory()">Update Inventory</button>
+                    <div class="inventory-grid" id="inventoryManagementGrid" style="margin-top: 30px;"></div>
+                </div>
+
+                <div id="adminRequests" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Blood Requests</h2>
+                    <div id="requestAlert"></div>
+                    <h3 style="margin-bottom: 15px;">Admin Initiated Requests (with Donor Notifications)</h3>
+                    <form onsubmit="addRequest(event)" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Patient Name (for record)</label>
+                                <input type="text" id="requestPatientName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Group Required</label>
+                                <select id="requestBloodGroup" required>
+                                    <option value="">Select</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Units Required</label>
+                                <input type="number" id="requestUnits" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact (for patient)</label>
+                                <input type="tel" id="requestContact" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Add Request & Send Global Notification</button>
+                    </form>
+                    
+                    <h3 style="margin: 30px 0 20px;">Current Request List</h3>
+                    <div id="requestsList"></div>
+                </div>
+
+                <div id="adminMessages" class="section">
+                    <h2 style="margin-bottom: 20px; color: #1f2937;">Received Messages / Donor Replies</h2>
+                    <div id="adminMessagesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="messageModalTitle">Send Message</h2>
+                    <button class="close-modal" onclick="closeMessageModal()">&times;</button>
+                </div>
+                <div id="modalAlert"></div>
+                
+                <div id="messageThreadContainer" class="message-thread-container" style="display: none;"></div>
+
+                <form id="messageForm" onsubmit="sendMessage(event)">
+                    <div id="publicMessageFields" style="display: none;">
+                        <div class="form-group">
+                            <label>Your Name *</label>
+                            <input type="text" id="publicSenderName" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Your Contact Number *</label>
+                            <input type="tel" id="publicSenderContact" placeholder="Your contact number">
+                        </div>
+                    </div>
+                    <div id="replyMessageFields" style="display: none;">
+                         <div class="form-group">
+                            <label>Recipient:</label>
+                            <p id="replyRecipientName" style="font-weight: bold;"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="messageText" rows="4" placeholder="Type your message..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let donors = [];
+        let inventory = {
+            'A+': 0, 'A-': 0, 'B+': 0, 'B-': 0,
+            'AB+': 0, 'AB-': 0, 'O+': 0, 'O-': 0
+        };
+        // Requests structure: { ..., source: 'Admin'/'Patient/Public', donorAcceptances: [{ donorId, name, contact, date }] }
+        let requests = []; 
+        // Messages structure: { ..., requestDate: '...' } added to Notification types for linking
+        let messages = []; 
+        let currentDonor = null;
+        let currentMessageRecipient = null; 
+        const ADMIN_PASSWORD = 'DonateBlood';
+        let donorIdCounter = 1;
+        let pendingResetCode = null;
+        let resetDonorId = null;
+        let resendTimer = null;
+        let lastNotificationDate = null; 
+
+        // Initialize
+        loadData();
+        searchDonorsPublic();
+        displayPublicInventory();
+
+        function loadData() {
+            const savedDonors = JSON.parse(localStorage.getItem('donors') || '[]');
+            const savedInventory = JSON.parse(localStorage.getItem('inventory') || 'null');
+            const savedRequests = JSON.parse(localStorage.getItem('requests') || '[]');
+            const savedMessages = JSON.parse(localStorage.getItem('messages') || '[]');
+            const savedCounter = parseInt(localStorage.getItem('donorIdCounter') || '1');
+            const savedNotificationDate = localStorage.getItem('lastNotificationDate');
+
+            if (savedInventory) inventory = savedInventory;
+            else {
+                inventory = { 'A+': 0, 'A-': 0, 'B+': 0, 'B-': 0, 'AB+': 0, 'AB-': 0, 'O+': 0, 'O-': 0 };
+            }
+            
+            // Ensure all loaded requests have the new donorAcceptances array for safety
+            requests = savedRequests.map(req => ({
+                ...req,
+                donorAcceptances: req.donorAcceptances || [],
+                source: req.source || (req.requesterName ? 'Patient/Public' : 'Admin') // Backfill source
+            }));
+            
+            // Ensure all donors have the new profilePictureURL field
+             donors = savedDonors.map(d => ({
+                ...d,
+                profilePictureURL: d.profilePictureURL || null
+            }));
+
+            messages = savedMessages;
+            donorIdCounter = savedCounter;
+            lastNotificationDate = savedNotificationDate ? new Date(savedNotificationDate) : null;
+        }
+
+        function saveData() {
+            localStorage.setItem('donors', JSON.stringify(donors));
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+            localStorage.setItem('requests', JSON.stringify(requests));
+            localStorage.setItem('messages', JSON.stringify(messages));
+            localStorage.setItem('donorIdCounter', donorIdCounter.toString());
+            if (lastNotificationDate) localStorage.setItem('lastNotificationDate', lastNotificationDate.toISOString());
+        }
+
+        // --- Portal and Auth Logic ---
+        function showPortal(portal) {
+            document.getElementById('portalSelection').style.display = 'none';
+            if (portal === 'donor') {
+                document.getElementById('donorPortal').classList.add('active');
+            } else {
+                document.getElementById('adminPortal').classList.add('active');
+            }
+        }
+
+        function goBack() {
+            document.getElementById('donorPortal').classList.remove('active');
+            document.getElementById('adminPortal').classList.remove('active');
+            document.getElementById('portalSelection').style.display = 'block';
+            
+            document.getElementById('donorAuth').style.display = 'block';
+            document.getElementById('donorDashboard').style.display = 'none';
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            currentDonor = null;
+            if (resendTimer) clearInterval(resendTimer);
+        }
+
+        function showDonorAuthSection(sectionId) {
+            document.querySelectorAll('#donorAuth .section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('#donorAuth .nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelector(`.nav-btn[onclick*="${sectionId}"]`).classList.add('active');
+
+            if (sectionId === 'donorSearchPublic') searchDonorsPublic();
+            if (sectionId === 'donorInventoryPublic') displayPublicInventory();
+        }
+
+        function donorLogin(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('donorLoginAlert');
+            const id = document.getElementById('loginDonorId').value.toUpperCase();
+            const password = document.getElementById('loginDonorPassword').value;
+
+            const donor = donors.find(d => d.id === id && d.password === password);
+
+            if (donor) {
+                currentDonor = donor;
+                document.getElementById('donorAuth').style.display = 'none';
+                document.getElementById('donorDashboard').style.display = 'block';
+                loadDonorDashboard();
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Invalid Donor ID or Password</div>';
+            }
+        }
+
+        function donorLogout() {
+            currentDonor = null;
+            document.getElementById('donorAuth').style.display = 'block';
+            document.getElementById('donorDashboard').style.display = 'none';
+            document.getElementById('loginDonorId').value = '';
+            document.getElementById('loginDonorPassword').value = '';
+        }
+
+        function adminLogin(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('adminLoginAlert');
+            const password = document.getElementById('adminPassword').value;
+
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAdminDashboard();
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Invalid admin password</div>';
+            }
+        }
+
+        function adminLogout() {
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // --- Password Reset Logic (OTP Resend) ---
+
+        let resendCountdown = 60; // 60 seconds
+
+        function startResendTimer() {
+            document.getElementById('resendOtpBtn').style.display = 'none';
+            document.getElementById('resendTimer').style.display = 'inline';
+            resendCountdown = 60;
+
+            resendTimer = setInterval(() => {
+                resendCountdown--;
+                document.getElementById('resendTimer').textContent = `Resend available in ${resendCountdown}s`;
+                if (resendCountdown <= 0) {
+                    clearInterval(resendTimer);
+                    document.getElementById('resendOtpBtn').style.display = 'block';
+                    document.getElementById('resendTimer').style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        function sendResetCode(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('forgotPasswordAlert');
+            const id = document.getElementById('resetDonorId').value.toUpperCase();
+            const contact = document.getElementById('resetContact').value;
+
+            const donor = donors.find(d => d.id === id && d.contact === contact);
+
+            if (donor) {
+                pendingResetCode = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit code
+                resetDonorId = id;
+
+                alertDiv.innerHTML = `<div class="alert alert-info">ℹ️ A 4-digit reset code has been 'sent' to your registered contact number. **Code: ${pendingResetCode}** (for demonstration). Please enter the code below.</div>`;
+                document.getElementById('resetPasswordStep1').style.display = 'none';
+                document.getElementById('resetPasswordStep2').style.display = 'block';
+                
+                startResendTimer();
+
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Donor ID or Contact Number does not match our records.</div>';
+            }
+        }
+        
+        function resendResetCode() {
+            const alertDiv = document.getElementById('forgotPasswordAlert');
+            if (resendTimer) clearInterval(resendTimer);
+            
+            pendingResetCode = Math.floor(1000 + Math.random() * 9000).toString(); 
+            
+            alertDiv.innerHTML = `<div class="alert alert-info">ℹ️ **New Code Sent!** The new reset code is: **${pendingResetCode}** (for demonstration).</div>`;
+            
+            startResendTimer();
+        }
+
+        function resetPassword(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('forgotPasswordAlert');
+            const enteredCode = document.getElementById('resetCode').value;
+            const newPassword = document.getElementById('resetNewPassword').value;
+
+            if (enteredCode !== pendingResetCode) {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Invalid verification code. Please try again.</div>';
+                return;
+            }
+            
+            if (resendTimer) clearInterval(resendTimer);
+
+            const donor = donors.find(d => d.id === resetDonorId);
+            if (donor) {
+                donor.password = newPassword;
+                saveData();
+                alertDiv.innerHTML = '<div class="alert alert-success">✅ Password reset successful! You can now login with your new password.</div>';
+                
+                pendingResetCode = null;
+                resetDonorId = null;
+                document.getElementById('resetPasswordStep2').style.display = 'none';
+                document.getElementById('resetPasswordStep1').style.display = 'block';
+                document.getElementById('resetPasswordStep1').reset();
+
+                setTimeout(() => showDonorAuthSection('donorLogin'), 2000);
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ An unexpected error occurred. Please restart the process.</div>';
+                document.getElementById('resetPasswordStep2').style.display = 'none';
+                document.getElementById('resetPasswordStep1').style.display = 'block';
+            }
+        }
+        
+        // --- Donor Dashboard & Notification Logic ---
+
+        function loadDonorDashboard() {
+            const donor = currentDonor;
+            const donorAvatar = document.getElementById('donorAvatar');
+            
+            // NEW: Profile Picture logic
+            if (donor.profilePictureURL) {
+                donorAvatar.innerHTML = `<img src="${donor.profilePictureURL}" alt="Profile" onerror="this.onerror=null;this.src='';this.alt='I';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                donorAvatar.style.fontSize = '1em'; 
+            } else {
+                donorAvatar.innerHTML = donor.name.charAt(0).toUpperCase();
+                donorAvatar.style.fontSize = '3em';
+            }
+            
+            document.getElementById('donorWelcome').textContent = `Welcome, ${donor.name}!`;
+            document.getElementById('donorIdDisplay').textContent = `Donor ID: ${donor.id}`;
+
+            displayDonorProfile();
+            displayDonorHistory();
+            displayDonorMessages();
+            populateEditForm();
+            checkAndDisplayNotification(); 
+        }
+        
+        function checkAndDisplayNotification() {
+            const notificationBar = document.getElementById('bloodRequestNotification');
+            const notificationText = document.getElementById('notificationText');
+            
+            const latestNotification = messages
+                .filter(m => m.type === 'Notification' && m.to === 'All' && m.requestDate)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                
+            if (latestNotification) {
+                const latestRequest = requests.find(r => r.date === latestNotification.requestDate);
+                const hasAccepted = latestRequest && latestRequest.donorAcceptances.some(a => a.donorId === currentDonor.id);
+                
+                // Get the date this specific donor dismissed/accepted this request
+                const lastDonorActionDate = localStorage.getItem(`donorAcceptanceDate:${currentDonor.id}:${latestNotification.requestDate}`);
+                
+                // If it's a new request OR the donor hasn't explicitly accepted/dismissed it yet
+                if (!lastDonorActionDate) {
+                    notificationText.innerHTML = `🚨 **URGENT BLOOD REQUEST:** ${latestNotification.message}`;
+                    notificationBar.style.display = 'flex';
+                } else {
+                     // If the donor has already accepted/acted on this specific request, hide it.
+                    notificationBar.style.display = 'none';
+                }
+            } else {
+                notificationBar.style.display = 'none';
+            }
+        }
+        
+        // NEW: Donor acceptance flow
+        function acceptBloodRequest() {
+            if (!currentDonor) return alert('Please login to accept the request.');
+
+            const latestNotification = messages
+                .filter(m => m.type === 'Notification' && m.to === 'All' && m.requestDate)
+                .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+            
+            if (!latestNotification) {
+                document.getElementById('bloodRequestNotification').style.display = 'none';
+                return;
+            }
+            
+            const latestRequest = requests.find(r => r.date === latestNotification.requestDate);
+                
+            if (latestRequest) {
+                // Check if already accepted
+                if (!latestRequest.donorAcceptances.some(a => a.donorId === currentDonor.id)) {
+                    const acceptance = {
+                        donorId: currentDonor.id,
+                        name: currentDonor.name,
+                        contact: currentDonor.contact,
+                        date: new Date().toISOString()
+                    };
+                    latestRequest.donorAcceptances.push(acceptance);
+                    saveData();
+                    
+                    alert(`Thank you, ${currentDonor.name}! Your offer to donate has been registered with the Admin (Contact: ${currentDonor.contact}). They will contact you.`);
+                } else {
+                     alert(`You have already accepted this request.`);
+                }
+                
+                // Mark as accepted/acted on for this specific donor/request pair
+                localStorage.setItem(`donorAcceptanceDate:${currentDonor.id}:${latestNotification.requestDate}`, new Date().toISOString());
+                document.getElementById('bloodRequestNotification').style.display = 'none';
+
+            } else {
+                 alert(`The request linked to this notification was not found.`);
+                 localStorage.setItem(`donorAcceptanceDate:${currentDonor.id}:${latestNotification.requestDate}`, new Date().toISOString());
+                 document.getElementById('bloodRequestNotification').style.display = 'none';
+            }
+        }
+
+
+        function showDonorTab(tabId) {
+            document.querySelectorAll('#donorDashboard .section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('#donorDashboard .tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabId === 'donorMessages') displayDonorMessages();
+        }
+
+        function displayDonorMessages() {
+            const donor = currentDonor;
+            const messagesDiv = document.getElementById('donorMessagesContent');
+            const donorMessages = messages
+                .filter(m => (m.to === donor.id && m.from === 'Admin') || (m.from === donor.id && m.to === 'Admin'))
+                .sort((a, b) => new Date(a.date) - new Date(b.date)); 
+            
+            if (donorMessages.length === 0) {
+                messagesDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No messages yet. Send a message to Admin to start a conversation.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            messagesDiv.innerHTML = `<div class="message-thread-container">` + donorMessages.map(msg => {
+                const isSentByDonor = msg.from === donor.id;
+                const senderName = isSentByDonor ? 'You' : 'Admin';
+                const messageClass = isSentByDonor ? 'message-sent' : 'message-received';
+
+                return `
+                    <div class="message-item ${messageClass}">
+                        <div class="message-sender">${senderName}</div>
+                        <div class="message-text">${msg.message}</div>
+                        <div class="message-time">${new Date(msg.date).toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('') + `</div>`;
+            
+            const threadContainer = messagesDiv.querySelector('.message-thread-container');
+            if(threadContainer) threadContainer.scrollTop = threadContainer.scrollHeight;
+        }
+
+        // --- Admin Logic ---
+
+        // ADMIN INITIATED REQUEST
+        function addRequest(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('requestAlert');
+            const requestDate = new Date().toISOString();
+
+            const request = {
+                patientName: document.getElementById('requestPatientName').value,
+                bloodGroup: document.getElementById('requestBloodGroup').value,
+                units: parseInt(document.getElementById('requestUnits').value),
+                contact: document.getElementById('requestContact').value,
+                date: requestDate,
+                status: 'pending',
+                source: 'Admin', // Admin initiated
+                donorAcceptances: [] // NEW FIELD
+            };
+
+            requests.push(request);
+            
+            // Create a global notification message linked to the request date
+            const notificationMessage = {
+                from: 'Admin',
+                to: 'All', 
+                type: 'Notification',
+                message: `New request for ${request.units} units of ${request.bloodGroup}! Please check availability.`,
+                date: requestDate,
+                requestDate: requestDate // Link to the request
+            };
+            messages.push(notificationMessage);
+            
+            saveData();
+
+            alertDiv.innerHTML = '<div class="alert alert-success">✅ Blood request added & **Notification sent to all donors!**</div>';
+            e.target.reset();
+            displayRequests();
+            setTimeout(() => alertDiv.innerHTML = '', 3000);
+        }
+        
+        // NEW: PATIENT INITIATED REQUEST
+        function submitPatientRequest(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('patientRequestAlert');
+            const requestDate = new Date().toISOString();
+
+            const reqName = document.getElementById('patientRequesterName').value;
+            const reqContact = document.getElementById('patientRequesterContact').value;
+            const patientName = document.getElementById('patientPatientName').value || reqName;
+            const bloodGroup = document.getElementById('patientRequestBloodGroup').value;
+            const units = parseInt(document.getElementById('patientRequestUnits').value);
+            const location = document.getElementById('patientLocation').value;
+            const notes = document.getElementById('patientRequestNotes').value;
+
+            const request = {
+                patientName: patientName,
+                bloodGroup: bloodGroup,
+                units: units,
+                contact: reqContact,
+                date: requestDate,
+                status: 'pending',
+                source: 'Patient/Public',
+                requesterName: reqName,
+                location: location,
+                notes: notes,
+                donorAcceptances: []
+            };
+
+            requests.push(request);
+            saveData();
+
+            alertDiv.innerHTML = '<div class="alert alert-success">✅ Your blood request has been submitted to the Admin. They will contact you shortly.</div>';
+            e.target.reset();
+            setTimeout(() => alertDiv.innerHTML = '', 5000);
+        }
+        
+        function displayAdminMessages() {
+            const listDiv = document.getElementById('adminMessagesList');
+            const actionableMessages = messages.filter(m => 
+                (m.from.startsWith('D-') && m.to === 'Admin' && m.type !== 'Notification') || 
+                (m.from === 'Public' && m.type !== 'Notification') 
+            ).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (actionableMessages.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No new messages or donor replies.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = actionableMessages.map((msg, index) => {
+                const isDonorReply = msg.from.startsWith('D-');
+                const title = isDonorReply ? `Donor Reply: ${msg.from}` : (msg.publicSender ? `Public Contact for Donor: ${msg.to}` : `Public Message to Admin`);
+                const senderDetail = isDonorReply ? `Donor ID: ${msg.from}` : `Sender: ${msg.publicSender || 'Public User'}`;
+                const recipientId = isDonorReply ? msg.from : msg.to;
+
+                return `
+                    <div class="donor-card" style="border-left: 5px solid ${isDonorReply ? '#667eea' : '#dc2626'};">
+                        <div class="donor-header">
+                            <div class="donor-name">${title}</div>
+                            <div style="color: #6b7280; font-size: 0.9em;">${new Date(msg.date).toLocaleString()}</div>
+                        </div>
+                        <div class="donor-info" style="margin-top: 10px;">
+                            <div class="info-item"><span class="info-label">${senderDetail}</span></div>
+                            <div style="margin-top: 10px; font-style: italic;">**Message:** ${msg.message}</div>
+                        </div>
+                        <div style="margin-top: 15px; display: flex; gap: 10px;">
+                            ${isDonorReply ? 
+                                `<button class="btn btn-secondary btn-small" onclick="openMessageModal('${recipientId}', 'admin')">Reply (Open Thread)</button>` :
+                                `<button class="btn btn-secondary btn-small" onclick="alert('Contact details: ${msg.publicSender}. Cannot reply to public users directly in this system.')">View Contact</button>`
+                            }
+                            <button class="btn btn-small" onclick="deleteActionableMessage(${index})" style="background: #991b1b;">Archive/Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function deleteActionableMessage(index) {
+            if (!confirm('Are you sure you want to archive/delete this message?')) return;
+
+            const actionableMessages = messages.filter(m => 
+                (m.from.startsWith('D-') && m.to === 'Admin' && m.type !== 'Notification') || 
+                (m.from === 'Public' && m.type !== 'Notification')
+            ).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            const msgToDelete = actionableMessages[index];
+
+            const globalIndex = messages.findIndex(m => 
+                m.from === msgToDelete.from && 
+                m.to === msgToDelete.to && 
+                m.message === msgToDelete.message && 
+                m.date === msgToDelete.date
+            );
+
+            if (globalIndex > -1) {
+                messages.splice(globalIndex, 1);
+                saveData();
+                displayAdminMessages();
+            } else {
+                 alert('Error finding message.');
+            }
+        }
+        
+        // --- Messenger Modal Logic (Enhanced for Threads) ---
+
+        function openMessageModal(recipientId, senderType = 'public') {
+            currentMessageRecipient = recipientId;
+            document.getElementById('messageModal').style.display = 'flex';
+            document.getElementById('modalAlert').innerHTML = '';
+            document.getElementById('messageText').value = '';
+            
+            const modalTitle = document.getElementById('messageModalTitle');
+            const publicFields = document.getElementById('publicMessageFields');
+            const replyFields = document.getElementById('replyMessageFields');
+            const threadContainer = document.getElementById('messageThreadContainer');
+
+            threadContainer.style.display = 'none';
+            publicFields.style.display = 'none';
+            replyFields.style.display = 'none';
+            document.getElementById('publicSenderName').required = false;
+            document.getElementById('publicSenderContact').required = false;
+
+            if (currentDonor && recipientId === 'Admin') {
+                modalTitle.textContent = `Conversation with Admin`;
+                replyFields.style.display = 'block';
+                document.getElementById('replyRecipientName').textContent = 'Admin';
+                loadMessageThread(currentDonor.id, 'Admin');
+                
+            } else if (senderType === 'admin' && recipientId.startsWith('D-')) {
+                const donor = donors.find(d => d.id === recipientId);
+                modalTitle.textContent = `Conversation with ${donor ? donor.name : 'Donor'} (${recipientId})`;
+                replyFields.style.display = 'block';
+                document.getElementById('replyRecipientName').textContent = donor ? donor.name : recipientId;
+                loadMessageThread('Admin', recipientId);
+                
+            } else if (recipientId.startsWith('D-') && currentDonor === null) {
+                const donor = donors.find(d => d.id === recipientId);
+                modalTitle.textContent = `Contact Donor ${recipientId} (${donor ? donor.name : 'Unknown'})`;
+                publicFields.style.display = 'block';
+                document.getElementById('publicSenderName').required = true;
+                document.getElementById('publicSenderContact').required = true;
+            }
+        }
+
+        function loadMessageThread(senderId, recipientId) {
+            const threadContainer = document.getElementById('messageThreadContainer');
+            const conversation = messages
+                .filter(m => 
+                    (m.from === senderId && m.to === recipientId) || 
+                    (m.from === recipientId && m.to === senderId)
+                )
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            threadContainer.style.display = 'flex';
+            threadContainer.innerHTML = conversation.map(msg => {
+                const isSentByCurrentUser = (currentDonor && msg.from === currentDonor.id) || (document.getElementById('adminDashboard').style.display === 'block' && msg.from === 'Admin');
+                const messageClass = isSentByCurrentUser ? 'message-sent' : 'message-received';
+                const senderName = isSentByCurrentUser ? 'You' : msg.from; 
+
+                return `
+                    <div class="message-item ${messageClass}">
+                        <div class="message-sender">${senderName}</div>
+                        <div class="message-text">${msg.message}</div>
+                        <div class="message-time">${new Date(msg.date).toLocaleString()}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            threadContainer.scrollTop = threadContainer.scrollHeight;
+        }
+
+        function closeMessageModal() {
+            document.getElementById('messageModal').style.display = 'none';
+            currentMessageRecipient = null;
+            document.getElementById('publicSenderName').required = false;
+            document.getElementById('publicSenderContact').required = false;
+            if (document.getElementById('adminDashboard').style.display === 'block') {
+                 displayAdminMessages(); 
+            }
+        }
+
+        function sendMessage(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('modalAlert');
+            const messageText = document.getElementById('messageText').value;
+
+            if (!currentMessageRecipient) {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Error: No recipient selected</div>';
+                return;
+            }
+
+            let message = { type: 'Message' };
+
+            if (currentDonor && currentMessageRecipient === 'Admin') {
+                message.from = currentDonor.id;
+                message.to = 'Admin';
+            } else if (currentMessageRecipient.startsWith('D-') && currentDonor === null) {
+                const senderName = document.getElementById('publicSenderName').value;
+                const senderContact = document.getElementById('publicSenderContact').value;
+
+                if (!senderName || !senderContact) {
+                    alertDiv.innerHTML = '<div class="alert alert-error">❌ Please provide your Name and Contact Number.</div>';
+                    return;
+                }
+
+                message.from = 'Public';
+                message.to = currentMessageRecipient;
+                message.publicSender = `${senderName} (${senderContact})`; 
+                
+            } else if (currentMessageRecipient.startsWith('D-') && document.getElementById('adminDashboard').style.display === 'block') {
+                message.from = 'Admin';
+                message.to = currentMessageRecipient;
+            } else {
+                 alertDiv.innerHTML = '<div class="alert alert-error">❌ Unhandled messaging case.</div>';
+                 return;
+            }
+            
+            message.message = messageText;
+            message.date = new Date().toISOString();
+
+            messages.push(message);
+            saveData();
+            
+            alertDiv.innerHTML = '<div class="alert alert-success">✅ Message sent!</div>';
+            document.getElementById('messageForm').reset();
+            
+            if (currentDonor && currentMessageRecipient === 'Admin') {
+                 loadMessageThread(currentDonor.id, 'Admin');
+                 displayDonorMessages();
+            } else if (currentMessageRecipient.startsWith('D-') && document.getElementById('adminDashboard').style.display === 'block') {
+                 loadMessageThread('Admin', currentMessageRecipient);
+            }
+            
+            if (message.from === 'Public') {
+                setTimeout(() => closeMessageModal(), 1500);
+            } else {
+                 setTimeout(() => alertDiv.innerHTML = '', 1500);
+            }
+        }
+
+        function registerDonor(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('donorRegisterAlert');
+
+            const donor = {
+                id: 'D-' + donorIdCounter++,
+                name: document.getElementById('donorName').value,
+                age: document.getElementById('donorAge').value,
+                bloodGroup: document.getElementById('donorBloodGroup').value,
+                gender: document.getElementById('donorGender').value,
+                contact: document.getElementById('donorContact').value,
+                email: document.getElementById('donorEmail').value,
+                address: document.getElementById('donorAddress').value,
+                password: document.getElementById('donorPassword').value,
+                medicalHistory: document.getElementById('donorMedicalHistory').value,
+                registrationDate: new Date().toISOString(),
+                lastDonation: null,
+                available: true,
+                donationHistory: [],
+                profilePictureURL: null // NEW FIELD
+            };
+
+            donors.push(donor);
+            saveData();
+
+            alertDiv.innerHTML = `<div class="alert alert-success">✅ **Registration successful!** Your Donor ID is: **${donor.id}**. Please save this ID for login.</div>`;
+            document.getElementById('donorRegisterForm').reset();
+
+            setTimeout(() => {
+                showDonorAuthSection('donorLogin');
+                document.getElementById('loginDonorId').value = donor.id;
+            }, 5000);
+        }
+
+        function displayDonorProfile() {
+            const donor = currentDonor;
+            const canDonate = donor.available;
+            const daysSinceLastDonation = donor.lastDonation ? 
+                Math.floor((new Date() - new Date(donor.lastDonation)) / (1000 * 60 * 60 * 24)) : null;
+
+            document.getElementById('donorProfileContent').innerHTML = `
+                <div class="donor-card">
+                    <div class="donor-header">
+                        <div class="donor-name">${donor.name}</div>
+                        <div class="blood-badge">${donor.bloodGroup}</div>
+                    </div>
+                    <div class="donor-info">
+                        <div class="info-item"><span class="info-label">Donor ID:</span> ${donor.id}</div>
+                        <div class="info-item"><span class="info-label">Age:</span> ${donor.age}</div>
+                        <div class="info-item"><span class="info-label">Gender:</span> ${donor.gender}</div>
+                        <div class="info-item"><span class="info-label">Contact:</span> ${donor.contact}</div>
+                        <div class="info-item"><span class="info-label">Email:</span> ${donor.email || 'Not provided'}</div>
+                        <div class="info-item"><span class="info-label">Address:</span> ${donor.address}</div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span> 
+                            <span class="status-badge ${canDonate ? 'status-available' : 'status-unavailable'}">
+                                ${canDonate ? 'Available to Donate' : 'Not Available'}
+                            </span>
+                        </div>
+                        <div class="info-item"><span class="info-label">Last Donation:</span> ${donor.lastDonation ? new Date(donor.lastDonation).toLocaleDateString() : 'Never'}</div>
+                        ${daysSinceLastDonation !== null ? `<div class="info-item"><span class="info-label">Days Since Last Donation:</span> ${daysSinceLastDonation}</div>` : ''}
+                        <div class="info-item"><span class="info-label">Total Donations:</span> ${donor.donationHistory.length}</div>
+                    </div>
+                    ${donor.medicalHistory ? `<div style="margin-top: 15px;"><span class="info-label">Medical History:</span> ${donor.medicalHistory}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        function displayDonorHistory() {
+            const donor = currentDonor;
+            const historyDiv = document.getElementById('donorHistoryContent');
+
+            if (donor.donationHistory.length === 0) {
+                historyDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🩸</div>
+                        <p>No donation history yet. Thank you for registering!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            historyDiv.innerHTML = donor.donationHistory.map(donation => `
+                <div class="donor-card">
+                    <div class="donor-info">
+                        <div class="info-item"><span class="info-label">Date:</span> ${new Date(donation.date).toLocaleDateString()}</div>
+                        <div class="info-item"><span class="info-label">Units:</span> ${donation.units}</div>
+                        <div class="info-item"><span class="info-label">Location:</span> ${donation.location || 'Blood Bank'}</div>
+                        ${donation.notes ? `<div class="info-item"><span class="info-label">Notes:</span> ${donation.notes}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function populateEditForm() {
+            const donor = currentDonor;
+            document.getElementById('editDonorName').value = donor.name;
+            document.getElementById('editDonorAge').value = donor.age;
+            document.getElementById('editDonorContact').value = donor.contact;
+            document.getElementById('editDonorEmail').value = donor.email || '';
+            document.getElementById('editDonorAddress').value = donor.address;
+            document.getElementById('editDonorProfilePicture').value = donor.profilePictureURL || ''; // NEW: Populate URL
+        }
+
+        function updateDonorProfile(e) {
+            e.preventDefault();
+            const alertDiv = document.getElementById('donorEditAlert');
+
+            currentDonor.name = document.getElementById('editDonorName').value;
+            currentDonor.age = document.getElementById('editDonorAge').value;
+            currentDonor.contact = document.getElementById('editDonorContact').value;
+            currentDonor.email = document.getElementById('editDonorEmail').value;
+            currentDonor.address = document.getElementById('editDonorAddress').value;
+            currentDonor.profilePictureURL = document.getElementById('editDonorProfilePicture').value || null; // NEW: Save URL
+
+            const newPassword = document.getElementById('editDonorPassword').value;
+            if (newPassword) {
+                currentDonor.password = newPassword;
+            }
+
+            const donorIndex = donors.findIndex(d => d.id === currentDonor.id);
+            donors[donorIndex] = currentDonor;
+            saveData();
+
+            alertDiv.innerHTML = '<div class="alert alert-success">✅ Profile updated successfully!</div>';
+            loadDonorDashboard(); // Reload to update avatar
+            setTimeout(() => alertDiv.innerHTML = '', 3000);
+        }
+        
+        function searchDonorsPublic() {
+            const bloodGroup = document.getElementById('publicSearchBloodGroup').value;
+            const availability = document.getElementById('publicSearchAvailability').value;
+            const resultsDiv = document.getElementById('publicSearchResults');
+
+            let filtered = donors.filter(d => {
+                if (bloodGroup && d.bloodGroup !== bloodGroup) return false;
+                if (availability === 'available' && !d.available) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>No donors found matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsDiv.innerHTML = filtered.map(donor => `
+                <div class="donor-card">
+                    <div class="donor-header">
+                        <div class="donor-name">${donor.name} (${donor.id})</div>
+                        <div class="blood-badge">${donor.bloodGroup}</div>
+                    </div>
+                    <div class="donor-info">
+                        <div class="info-item"><span class="info-label">Age:</span> ${donor.age}</div>
+                        <div class="info-item"><span class="info-label">Gender:</span> ${donor.gender}</div>
+                        <div class="info-item"><span class="info-label">Contact:</span> ${donor.contact}</div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span> 
+                            <span class="status-badge ${donor.available ? 'status-available' : 'status-unavailable'}">
+                                ${donor.available ? 'Available' : 'Not Available'}
+                            </span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="openMessageModal('${donor.id}')">Contact Donor</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function displayPublicInventory() {
+            const grid = document.getElementById('publicInventoryGrid');
+            grid.innerHTML = Object.entries(inventory).map(([type, units]) => `
+                <div class="inventory-card">
+                    <div class="blood-type">${type}</div>
+                    <div class="units-count">${units}</div>
+                    <div class="units-label">Units Available</div>
+                </div>
+            `).join('');
+        }
+        
+        function loadAdminDashboard() {
+            displayAdminStats();
+            searchDonorsAdmin();
+            displayInventoryManagement();
+            displayRequests();
+            displayAdminMessages();
+        }
+        
+        function showAdminSection(sectionId) {
+            document.querySelectorAll('#adminDashboard .section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('#adminDashboard .nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelector(`#adminDashboard .nav-btn[onclick*="${sectionId}"]`).classList.add('active');
+
+
+            if (sectionId === 'adminStats') displayAdminStats();
+            if (sectionId === 'adminDonors') searchDonorsAdmin();
+            if (sectionId === 'adminInventory') displayInventoryManagement();
+            if (sectionId === 'adminRequests') displayRequests();
+            if (sectionId === 'adminMessages') displayAdminMessages();
+        }
+
+        function displayAdminStats() {
+            const totalDonors = donors.length;
+            const availableDonors = donors.filter(d => d.available).length;
+            const totalDonations = donors.reduce((sum, d) => sum + d.donationHistory.length, 0);
+            const totalUnits = Object.values(inventory).reduce((sum, units) => sum + units, 0);
+
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalDonors}</div>
+                    <div class="stat-label">Total Donors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${availableDonors}</div>
+                    <div class="stat-label">Available Donors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalDonations}</div>
+                    <div class="stat-label">Total Donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${totalUnits}</div>
+                    <div class="stat-label">Units in Stock</div>
+                </div>
+            `;
+
+            document.getElementById('adminInventoryGrid').innerHTML = Object.entries(inventory).map(([type, units]) => `
+                <div class="inventory-card">
+                    <div class="blood-type">${type}</div>
+                    <div class="units-count">${units}</div>
+                    <div class="units-label">Units Available</div>
+                </div>
+            `).join('');
+        }
+        
+        function searchDonorsAdmin() {
+            const name = document.getElementById('adminSearchName').value.toLowerCase();
+            const bloodGroup = document.getElementById('adminSearchBloodGroup').value;
+            const status = document.getElementById('adminSearchStatus').value;
+            const listDiv = document.getElementById('adminDonorsList');
+
+            let filtered = donors.filter(d => {
+                if (name && !d.name.toLowerCase().includes(name)) return false;
+                if (bloodGroup && d.bloodGroup !== bloodGroup) return false;
+                if (status === 'available' && !d.available) return false;
+                if (status === 'unavailable' && d.available) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <p>No donors found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = filtered.map(donor => `
+                <div class="donor-card">
+                    <div class="donor-header">
+                        <div class="donor-name">${donor.name} (${donor.id})</div>
+                        <div class="blood-badge">${donor.bloodGroup}</div>
+                    </div>
+                    <div class="donor-info">
+                        <div class="info-item"><span class="info-label">Age:</span> ${donor.age}</div>
+                        <div class="info-item"><span class="info-label">Gender:</span> ${donor.gender}</div>
+                        <div class="info-item"><span class="info-label">Contact:</span> ${donor.contact}</div>
+                        <div class="info-item"><span class="info-label">Email:</span> ${donor.email || 'N/A'}</div>
+                        <div class="info-item"><span class="info-label">Address:</span> ${donor.address}</div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span> 
+                            <span class="status-badge ${donor.available ? 'status-available' : 'status-unavailable'}">
+                                ${donor.available ? 'Available' : 'Not Available'}
+                            </span>
+                        </div>
+                        <div class="info-item"><span class="info-label">Total Donations:</span> ${donor.donationHistory.length}</div>
+                        <div class="info-item"><span class="info-label">Last Donation:</span> ${donor.lastDonation ? new Date(donor.lastDonation).toLocaleDateString() : 'Never'}</div>
+                        <div class="info-item"><span class="info-label">Medical History:</span> ${donor.medicalHistory || 'None'}</div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-small" onclick="toggleDonorAvailability('${donor.id}')">
+                            ${donor.available ? 'Mark Unavailable' : 'Mark Available'}
+                        </button>
+                        <button class="btn btn-secondary btn-small" onclick="recordDonation('${donor.id}')">Record Donation</button>
+                        <button class="btn btn-secondary btn-small" onclick="openMessageModal('${donor.id}', 'admin')">Send Message</button>
+                        <button class="btn btn-small" onclick="deleteDonor('${donor.id}')" style="background: #991b1b;">Delete Donor</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleDonorAvailability(donorId) {
+            const donor = donors.find(d => d.id === donorId);
+            donor.available = !donor.available;
+            saveData();
+            searchDonorsAdmin();
+        }
+
+        function recordDonation(donorId) {
+            const units = prompt('Enter number of units donated:', '1');
+            if (!units || isNaN(units) || units <= 0) return;
+
+            const donor = donors.find(d => d.id === donorId);
+            const donation = {
+                date: new Date().toISOString(),
+                units: parseInt(units),
+                location: 'Blood Bank'
+            };
+
+            donor.donationHistory.push(donation);
+            donor.lastDonation = donation.date;
+            donor.available = false;
+
+            inventory[donor.bloodGroup] += parseInt(units);
+
+            saveData();
+            searchDonorsAdmin();
+            displayAdminStats();
+            displayInventoryManagement();
+            displayPublicInventory();
+            alert('Donation recorded successfully!');
+        }
+
+        function deleteDonor(donorId) {
+            if (!confirm('Are you sure you want to delete this donor?')) return;
+
+            donors = donors.filter(d => d.id !== donorId);
+            messages = messages.filter(m => m.from !== donorId && m.to !== donorId);
+            saveData();
+            searchDonorsAdmin();
+            displayAdminStats();
+        }
+        
+        function displayInventoryManagement() {
+            const grid = document.getElementById('inventoryManagementGrid');
+            grid.innerHTML = Object.entries(inventory).map(([type, units]) => `
+                <div class="inventory-card">
+                    <div class="blood-type">${type}</div>
+                    <div class="units-count">${units}</div>
+                    <div class="units-label">Units Available</div>
+                </div>
+            `).join('');
+        }
+
+        function updateInventory() {
+            const bloodGroup = document.getElementById('inventoryBloodGroup').value;
+            const units = parseInt(document.getElementById('inventoryUnits').value);
+            const alertDiv = document.getElementById('inventoryAlert');
+
+            if (isNaN(units) || units < 0) {
+                alertDiv.innerHTML = '<div class="alert alert-error">❌ Please enter a valid number of units</div>';
+                return;
+            }
+
+            inventory[bloodGroup] = units;
+            saveData();
+            displayInventoryManagement();
+            displayPublicInventory();
+            displayAdminStats();
+
+            alertDiv.innerHTML = `<div class="alert alert-success">✅ Inventory updated: ${bloodGroup} now has ${units} units</div>`;
+            setTimeout(() => alertDiv.innerHTML = '', 3000);
+        }
+
+        function displayRequests() {
+            const listDiv = document.getElementById('requestsList');
+
+            if (requests.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>No blood requests at the moment.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = requests.map((req, index) => {
+                const isPublicRequest = req.source === 'Patient/Public';
+                const requesterDetails = isPublicRequest ? 
+                    `<div class="info-item"><span class="info-label">Requester:</span> ${req.requesterName}</div>
+                     <div class="info-item"><span class="info-label">Location:</span> ${req.location || 'N/A'}</div>
+                     <div class="info-item"><span class="info-label">Notes:</span> ${req.notes || 'N/A'}</div>` 
+                    : `<div class="info-item"><span class="info-label">Source:</span> Admin Initiated (Global Notification Sent)</div>`;
+
+                // NEW: Donor Acceptance display
+                const acceptanceHtml = req.donorAcceptances.length > 0 ? 
+                    `<div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-left: 3px solid #10b981; border-radius: 5px;">
+                        <p style="font-weight: bold; color: #065f46; margin-bottom: 5px;">Accepted by ${req.donorAcceptances.length} Donor(s):</p>
+                        ${req.donorAcceptances.map(a => `
+                            <div style="margin-top: 5px; font-size: 0.9em; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e0e7e9; padding-bottom: 5px;">
+                                <span style="font-weight: 600;">${a.name} (${a.donorId})</span>
+                                <span>Contact: ${a.contact} 
+                                <button class="btn btn-small btn-secondary" onclick="alert('Contacting ${a.name} at ${a.contact}')" style="margin-left: 10px;">Contact</button>
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>` : (req.source === 'Admin' ? '<div style="margin-top: 15px; color: #991b1b;">No donors have accepted this request yet.</div>' : '');
+
+                return `
+                    <div class="donor-card" style="border-left: 5px solid ${isPublicRequest ? '#667eea' : '#dc2626'};">
+                        <div class="donor-header">
+                            <div class="donor-name">${req.patientName} (For ${req.bloodGroup})</div>
+                            <div class="blood-badge">${req.bloodGroup} - ${req.units} Units</div>
+                        </div>
+                        <div class="donor-info">
+                            <div class="info-item"><span class="info-label">Request Contact:</span> ${req.contact}</div>
+                            <div class="info-item"><span class="info-label">Date:</span> ${new Date(req.date).toLocaleString()}</div>
+                            <div class="info-item">
+                                <span class="info-label">Status:</span> 
+                                <span class="status-badge ${req.status === 'fulfilled' ? 'status-available' : 'status-unavailable'}">
+                                    ${req.status === 'fulfilled' ? 'Fulfilled' : 'Pending'}
+                                </span>
+                            </div>
+                            ${requesterDetails}
+                        </div>
+                        
+                        ${acceptanceHtml}
+
+                        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                            ${req.status === 'pending' ? `
+                                <button class="btn btn-secondary btn-small" onclick="fulfillRequest(${index})">Mark as Fulfilled</button>
+                            ` : ''}
+                            <button class="btn btn-small" onclick="deleteRequest(${index})" style="background: #991b1b;">Delete Request</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function fulfillRequest(index) {
+            const request = requests[index];
+            
+            if (inventory[request.bloodGroup] < request.units) {
+                alert(`Insufficient blood units. Available: ${inventory[request.bloodGroup]}, Required: ${request.units}`);
+                return;
+            }
+
+            if (confirm(`Fulfill request for ${request.units} units of ${request.bloodGroup}? This will reduce inventory.`)) {
+                inventory[request.bloodGroup] -= request.units;
+                request.status = 'fulfilled';
+                saveData();
+                displayRequests();
+                displayInventoryManagement();
+                displayAdminStats();
+                displayPublicInventory();
+            }
+        }
+
+        function deleteRequest(index) {
+            if (confirm('Are you sure you want to delete this request?')) {
+                requests.splice(index, 1);
+                saveData();
+                displayRequests();
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('messageModal');
+            if (event.target === modal) {
+                closeMessageModal();
+            }
+        }
+    </script>
+</body>
+</html>
